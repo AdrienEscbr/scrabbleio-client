@@ -18,7 +18,7 @@ import GameScenePage from "./Components/Game/GameScenePage";
 import ResultsComponent from "./Components/Results/ResultsComponent";
 
 
-const ENDPOINT = "http://localhost:3001";
+const ENDPOINT = "https://dekou-server.onrender.com";
 const socket = openSocket(ENDPOINT, { transports: ['websocket'] });
 
 function App() {
