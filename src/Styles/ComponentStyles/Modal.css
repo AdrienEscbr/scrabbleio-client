@@ -1,0 +1,55 @@
+@keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -20%);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, 0%);
+    }
+  }
+  
+  @keyframes fadeOutUp {
+    from {
+      opacity: 1;
+      transform: translate(-50%, 0%);
+    }
+    to {
+      opacity: 0;
+      transform: translate(-50%, -20%);
+    }
+  }
+  
+  .modal {
+    position: fixed;
+    top: 3%;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    z-index: 1000;
+    display: flex;
+    /* width: 30%; */
+    height: auto;
+    background-color: rgb(255, 127, 48);
+    padding: 20px;
+    border: 3px solid rgb(201, 100, 38);
+    border-radius: 12px;
+    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.363);
+    opacity: 0; /* Initial opacity */
+    animation-duration: 0.5s; /* Animation duration */
+    animation-fill-mode: forwards; /* Ensure the final state is retained */
+  }
+  
+  .modal.fade-in {
+    animation-name: fadeInDown; /* Apply fade-in animation */
+  }
+  
+  .modal.fade-out {
+    animation-name: fadeOutUp; /* Apply fade-out animation */
+  }
+  
+  .content {
+    font-size: 16px;
+    color: black;
+    text-align: center;
+  }
+  

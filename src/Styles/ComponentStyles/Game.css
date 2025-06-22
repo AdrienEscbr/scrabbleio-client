@@ -1,0 +1,27 @@
+
+.slot{
+    width: 60px;
+    height: 60px;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.not_hoverable_slot{
+    background-color: red;
+    cursor: not-allowed;
+}
+
+.hoverable_slot{
+    cursor: pointer;
+}
+
+.hoverable_slot:hover {
+    background-color: green;
+}
+
+.game_grid{
+    
+}
