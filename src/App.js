@@ -26,7 +26,7 @@ function App() {
 
   return(
     // <BrowserRouter>
-    <HashRouter basename={process.env.PUBLIC_URL}>
+    <HashRouter basename={process.env.PUBLIC_URL || "/dekou-client"}>
       <Routes path="/">
           <Route index element={<HomeComponent />}/>
           <Route path="mode" element={<GameModeComponent />}/>
