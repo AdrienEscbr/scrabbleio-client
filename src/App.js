@@ -19,7 +19,8 @@ import ResultsComponent from "./Components/Results/ResultsComponent";
 
 
 const ENDPOINT = "https://dekou-server.onrender.com";
-const socket = openSocket(ENDPOINT, { transports: ['websocket'] });
+const socket = openSocket(process.env.ENDPOINT || ENDPOINT, { transports: ['websocket'] });
+
 
 function App() {
 
