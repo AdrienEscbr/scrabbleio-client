@@ -23,7 +23,7 @@
     "socket.io-client": "^4.8.1",
     "web-vitals": "^2.1.4"
   },
-  "homepage": "https://adrienescbr.github.io/AdrienEscbr/dekou-client",
+  "homepage": "https://adrienescbr.github.io/dekou-client",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
