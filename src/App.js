@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import openSocket from "socket.io-client";
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {BrowserRouter, HashRouter, Routes, Route} from "react-router-dom";
 
 import { FreeCamera, Vector3, HemisphericLight, MeshBuilder } from "@babylonjs/core";
 import GameSceneComponent from "./Components/Game/GameSceneComponent"; // uses above component in same directory
@@ -25,7 +25,8 @@ const socket = openSocket(process.env.ENDPOINT || ENDPOINT, { transports: ['webs
 function App() {
 
   return(
-    <BrowserRouter>
+    // <BrowserRouter>
+    <HashRouter basename={process.env.PUBLIC_URL}>
       <Routes path="/">
           <Route index element={<HomeComponent />}/>
           <Route path="mode" element={<GameModeComponent />}/>
@@ -38,7 +39,8 @@ function App() {
           <Route path="settings" element={<SettingsComponent />}/>
           <Route path="*" element={<NoPage/>}/>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
+    //</BrowserRouter> 
   );
 }
 
