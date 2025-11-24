@@ -25,11 +25,20 @@ function RoomComponent({ socket }) {
   let goTo = (path) => {
     // Notifier le serveur pour quitter la room avant de naviguer
     socket.emit("leaveRoom", roomId, () => {
+      // Disconnect if going back to home or multiplayer
+      if (path === "/" || path === "/multiplayer") {
+        if (socket && socket.connected) {
+          socket.disconnect();
+        }
+      }
       navigate(path);
     });
   };
 
   useEffect(() => {
+    if (socket && !socket.connected) {
+      socket.connect();
+    }
     socket.emit("joinRoom", roomId, (response) => {
       if (response.success) {
         setPlayers(response.state.players);

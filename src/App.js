@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from "react";
-import openSocket from "socket.io-client";
+import { HashRouter, Routes, Route } from "react-router-dom";
+import { io } from "socket.io-client";
 import "./Styles/App.css";
 
 import HomeComponent from "./Components/HomePage/HomeComponent";
@@ -14,8 +15,11 @@ import GameScenePage from "./Components/Game/GameScenePage";
 import ResultsComponent from "./Components/Results/ResultsComponent";
 
 
-const ENDPOINT = "http://localhost:3001" //"https://dekou-server.onrender.com";
-const socket = openSocket(process.env.ENDPOINT || ENDPOINT, { transports: ['websocket'] });
+const ENDPOINT = "http://localhost:3001"; // or your deployed server
+const socket = io(process.env.REACT_APP_ENDPOINT || ENDPOINT, {
+  transports: ['websocket'],
+  autoConnect: false,
+});
 
 
 function App() {
@@ -24,7 +28,7 @@ function App() {
     // <BrowserRouter>
     <HashRouter>
       <Routes>
-          <Route index element={<HomeComponent />}/>
+          <Route index element={<HomeComponent socket={socket} />}/>
           <Route path="mode" element={<GameModeComponent />}/>
           <Route path="local" element={<LobbyComponent mode={1}/>}/>
           <Route path="multiplayer" element={<LobbyComponent mode={2} socket={socket}/>}/>

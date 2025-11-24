@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import ArrowRight from "../../Assets/SVG/arrow_right.svg";
@@ -6,8 +6,16 @@ import Group from "../../Assets/SVG/group.svg";
 
 function LobbyComponent(props) {
   const navigate = useNavigate();
+  const socket = props.socket;
 
-  let goTo = (path) => {
+  // When landing on /multiplayer, ensure we are disconnected
+  useEffect(() => {
+    if (props.mode === 2 && socket && socket.connected) {
+      socket.disconnect();
+    }
+  }, [props.mode, socket]);
+
+  const goTo = (path) => {
     navigate(path);
   };
 
@@ -19,7 +27,11 @@ function LobbyComponent(props) {
           case 1:
             return (
               <div className="py-5 w-50 border border-white border-5 rounded">
-                <form action="" method="post" className="d-flex flex-column align-items-center justify-content-center gap-4">
+                <form
+                  action=""
+                  method="post"
+                  className="d-flex flex-column align-items-center justify-content-center gap-4"
+                >
                   <p className="display-5 text-center">Joueur 1 :</p>
                   <input
                     type="text"
@@ -42,7 +54,7 @@ function LobbyComponent(props) {
                   </p>
                   <p
                     className="display-5 text-center hovering cursorPointer"
-                    onClick={() => goTo("/mode")}
+                    onClick={() => goTo("/")}
                   >
                     RETOUR
                   </p>
@@ -50,32 +62,38 @@ function LobbyComponent(props) {
               </div>
             );
           case 2:
-            
-            let socket = props.socket;
+            // Multiplayer
 
-            const handleCreateRoom = () => {
-              console.log("Création d'une room...");
-              // Envoyer une requête pour créer une room
+            const ensureConnected = () =>
+              new Promise((resolve) => {
+                if (!socket) return resolve();
+                if (socket.connected) return resolve();
+                socket.once("connect", resolve);
+                socket.connect();
+              });
+
+            const handleCreateRoom = async () => {
+              console.log("Creation d'une room...");
+              await ensureConnected();
               socket.emit("createRoom", (response) => {
                 if (response.success) {
-                  //alert(`Room créée avec succès ! ID de la room : ${response.roomId}`);
-                  console.log(`Rejoint la room : ${response.roomId}`);
                   const roomId = response.roomId;
+                  console.log(`Rejoint la room : ${roomId}`);
                   navigate(`/room/${roomId}`);
                 } else {
-                  alert("Échec de la création de la room.");
+                  alert("Echec de la creation de la room.");
                 }
               });
             };
 
-            const handleJoinRoom = () => {
-              // Envoyer une requête pour rejoindre une room
+            const handleJoinRoom = async () => {
               const roomId = document.querySelector("input").value;
               console.log("Room ID : ", roomId);
-              if(roomId === "") {
+              if (roomId === "") {
                 alert("Veuillez entrer un code de room.");
                 return;
               }
+              await ensureConnected();
               socket.emit("joinRoom", roomId, (response) => {
                 if (response.success) {
                   console.log(`Rejoint la room : ${roomId}`);
@@ -88,9 +106,11 @@ function LobbyComponent(props) {
             };
 
             return (
-              
               <div className="py-5 w-50 border border-white border-5 rounded d-flex flex-column align-items-center justify-content-center gap-4">
-                <div className="input-group flex-nowrap w-75 mt-5 border border-black border-2 rounded" onClick={handleCreateRoom}>
+                <div
+                  className="input-group flex-nowrap w-75 mt-5 border border-black border-2 rounded"
+                  onClick={handleCreateRoom}
+                >
                   <span
                     className="input-group-text p-2 d-flex align-items-center justify-content-center"
                     style={{ width: "5rem", height: "6rem" }}
@@ -102,7 +122,7 @@ function LobbyComponent(props) {
                     />
                   </span>
                   <div className="text-center flex-grow-1 display-6 d-flex align-items-center justify-content-center hoveringSmall cursorPointer">
-                    Créer une partie
+                    Creer une partie
                   </div>
                 </div>
 
@@ -132,7 +152,7 @@ function LobbyComponent(props) {
 
                 <p
                   className="display-5 text-center hovering pt-3 cursorPointer"
-                  onClick={() => goTo("/mode")}
+                  onClick={() => goTo("/")}
                 >
                   RETOUR
                 </p>
