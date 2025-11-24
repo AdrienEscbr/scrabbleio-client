@@ -1,10 +1,6 @@
 
 import React, { useState, useEffect } from "react";
 import openSocket from "socket.io-client";
-import {BrowserRouter, HashRouter, Routes, Route} from "react-router-dom";
-
-import { FreeCamera, Vector3, HemisphericLight, MeshBuilder } from "@babylonjs/core";
-import GameSceneComponent from "./Components/Game/GameSceneComponent"; // uses above component in same directory
 import "./Styles/App.css";
 
 import HomeComponent from "./Components/HomePage/HomeComponent";
@@ -18,7 +14,7 @@ import GameScenePage from "./Components/Game/GameScenePage";
 import ResultsComponent from "./Components/Results/ResultsComponent";
 
 
-const ENDPOINT = "https://dekou-server.onrender.com";
+const ENDPOINT = "http://localhost:3001" //"https://dekou-server.onrender.com";
 const socket = openSocket(process.env.ENDPOINT || ENDPOINT, { transports: ['websocket'] });
 
 

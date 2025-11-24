@@ -27,9 +27,6 @@ function ResultsComponent({ socket }) {
 
     return (
         <div className="container w-100 h-100 d-flex justify-content-center align-items-center flex-column">
-            <p className='display-1'>
-                {isWinner ? "WINNER" : "LOOSER"}
-            </p>
             <div className='py-5 w-50 border border-white border-5 rounded'>
                 
                 <p className="display-5 text-center hovering cursorPointer" onClick={() => goTo('/')}>Go home</p>
