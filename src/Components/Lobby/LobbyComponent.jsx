@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import ArrowRight from "../../Assets/SVG/arrow_right.svg";
@@ -6,14 +6,6 @@ import Group from "../../Assets/SVG/group.svg";
 
 function LobbyComponent(props) {
   const navigate = useNavigate();
-  const socket = props.socket;
-
-  // When landing on /multiplayer, ensure we are disconnected
-  useEffect(() => {
-    if (props.mode === 2 && socket && socket.connected) {
-      socket.disconnect();
-    }
-  }, [props.mode, socket]);
 
   const goTo = (path) => {
     navigate(path);
@@ -63,6 +55,7 @@ function LobbyComponent(props) {
             );
           case 2:
             // Multiplayer
+            const socket = props.socket;
 
             const ensureConnected = () =>
               new Promise((resolve) => {
