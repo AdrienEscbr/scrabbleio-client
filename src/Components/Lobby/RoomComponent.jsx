@@ -110,14 +110,14 @@ function RoomComponent({ socket }) {
         text="Code partie copié dans le presse-papier."
         onClose={hideModal}
       />
-      <p className="display-1">DEKOU</p>
+      <p className="display-1">ScrabbleIO</p>
       <div className="py-5 w-50 border border-white border-5 rounded d-flex flex-column align-items-center justify-content-center gap-4">
         <div
           className="d-flex flex-row align-items-center justify-content-center gap-3"
           style={{ height: "6rem" }}
         >
           <p className="display-5 h-100 text-center d-flex align-items-center justify-content-center m-0">
-            Joueurs {players.length}/2
+            Joueurs {players.length}/4
           </p>
           <button onClick={handleCopyRoomId} className="border rounded">
             <img
@@ -150,7 +150,7 @@ function RoomComponent({ socket }) {
             </li>
           ))}
         </ul>
-        {players.length === 2 && (
+        {players.length === 4 && (
           <p
             className="display-5 text-center hovering cursorPointer"
             onClick={handleLauchingGame}

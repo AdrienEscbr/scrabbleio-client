@@ -1,0 +1,103 @@
+/* Basic styles for Scrabble board and rack */
+.board {
+    display: inline-block;
+    border: 2px solid #444;
+}
+
+.board-row {
+    display: flex;
+}
+
+.board-cell {
+    width: 60px;
+    height: 60px;
+    border: 1px solid #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: #f5f5f5;
+    user-select: none;
+}
+
+.board-cell.placement-local {
+    outline: 2px dashed #6c757d;
+}
+
+.board-cell .tile-points {
+    position: absolute;
+    bottom: 2px;
+    right: 4px;
+    font-size: 10px;
+    color: #333;
+}
+
+.board-cell.bonus-DL {
+    background: #cfe9ff;
+}
+
+.board-cell.bonus-TL {
+    background: #b4d9ff;
+}
+
+.board-cell.bonus-DW {
+    background: #ffd1d1;
+}
+
+.board-cell.bonus-TW {
+    background: #ffbaba;
+}
+
+.rack {
+    display: flex;
+    padding-left: 10%;
+    gap: 8px;
+}
+
+.rack-tile {
+    width: 100px;
+    height: 100px;
+    border: 1px solid #666;
+    font-size: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    cursor: grab;
+    position: relative;
+}
+
+.rack-tile.selected {
+    outline: 2px solid #28a745;
+}
+
+.rack-tile .tile-points {
+    position: absolute;
+    bottom: 2px;
+    right: 10px;
+    font-size: 20px;
+    color: #333;
+}
+
+.btn{
+    font-size: 1.8rem;
+}
+
+.log-panel {
+    font-size: 1.2rem;
+    height: 360px;
+    /* max-height: 400px; */
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+h6{
+    color: rgb(226, 226, 226);
+    font-size: 2.5rem;
+}
+
+.infos{
+    color: white;
+}

@@ -13,7 +13,7 @@ function LobbyComponent(props) {
 
   return (
     <div className="container w-100 h-100 d-flex justify-content-center align-items-center flex-column">
-      <p className="display-1">DEKOU</p>
+      <p className="display-1">ScrabbleIO</p>
       {(() => {
         switch (props.mode) {
           case 1:

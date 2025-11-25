@@ -10,13 +10,13 @@ function ResultsComponent({ socket }) {
     
     let goTo = (path) => {
         navigate(path);
-    } 
+    }
 
-    // Si aucune donnée n’est passée, on peut rediriger ou afficher un message d’erreur
-    const { gameState, isWinner } = location.state || {};
+    // Données passées depuis GameScenePage: scores, winnerIds, statsByPlayer, isWinner
+    const { scores, winnerIds, statsByPlayer, isWinner, players } = location.state || {};
 
     if (!location.state) {
-        // Par exemple, retourner à l’accueil ou afficher un message
+        // Par exemple, retourner à l'accueil ou afficher un message
         return (
         <div>
             <p>Aucune donnée de partie trouvée.</p>
@@ -28,10 +28,24 @@ function ResultsComponent({ socket }) {
     return (
         <div className="container w-100 h-100 d-flex justify-content-center align-items-center flex-column">
             <div className='py-5 w-50 border border-white border-5 rounded'>
-                
-                <p className="display-5 text-center hovering cursorPointer" onClick={() => goTo('/')}>Go home</p>
+                <h2 className="text-center mb-4">Résultats</h2>
+                <div className="text-center mb-3">
+                    {isWinner ? <span className="text-success">Bravo, vous avez gagné !</span> : <span className="text-muted">Partie terminée</span>}
+                </div>
+                <h4 className="mt-3">Scores</h4>
+                <ul className="list-group mb-4">
+                    {scores && Object.entries(scores).sort((a,b)=>b[1]-a[1]).map(([pid, score]) => (
+                        <li key={pid} className="list-group-item d-flex justify-content-between">
+                            <span>{pid === socket.id ? 'Vous' : ((players||[]).find(p=>p.id===pid)?.nickname || pid.slice(0,6))}</span>
+                            <strong>{score}</strong>
+                        </li>
+                    ))}
+                </ul>
+                <div className="text-center">
+                    <p className="display-5 text-center hovering cursorPointer" onClick={() => goTo('/')}>Accueil</p>
+                </div>
             </div>
-        </div>    
+        </div>
     );
 }
 
