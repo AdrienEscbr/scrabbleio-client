@@ -15,7 +15,7 @@ import GameScenePage from "./Components/Game/GameScenePage";
 import ResultsComponent from "./Components/Results/ResultsComponent";
 
 
-const ENDPOINT = "http://localhost:3001"; // or your deployed server
+const ENDPOINT = "https://scrabbleio-server.onrender.com"; //"http://localhost:3001"
 const socket = io(process.env.REACT_APP_ENDPOINT || ENDPOINT, {
   transports: ['websocket'],
   autoConnect: false,
