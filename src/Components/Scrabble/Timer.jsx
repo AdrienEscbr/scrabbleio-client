@@ -25,7 +25,7 @@ function formatMs(ms) {
 export default function Timer({ turnEndsAt }) {
   const remaining = useTurnTimer(turnEndsAt);
   return (
-    <div className='mt-3'>
+    <div className='mt-3 mb-5'>
       <h6>Timer</h6>
       <div className="display-6 infos">{formatMs(remaining)}</div>
     </div>

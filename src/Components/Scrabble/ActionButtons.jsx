@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function ActionButtons({ isMyTurn, canValidate, onValidate, onPass, onExchange, onCancel }) {
   return (
-    <div className="d-flex gap-2 mt-4">
+    <div className="d-flex gap-2 mt-4 action-buttons">
       <button className="btn btn-success" disabled={!isMyTurn || !canValidate} onClick={onValidate}>
         Valider
       </button>
@@ -18,4 +18,3 @@ export default function ActionButtons({ isMyTurn, canValidate, onValidate, onPas
     </div>
   );
 }
-

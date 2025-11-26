@@ -7,17 +7,6 @@ import './Styles/index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-function init(){
-  // set body heigh to 100% of actual window height
-  document.body.style.height = window.innerHeight + 'px';
-  document.body.style.width = window.innerWidth + 'px';
-}
-
-// resize the body height when the window is resized
-window.onresize = init;
-
-window.onload = init;
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

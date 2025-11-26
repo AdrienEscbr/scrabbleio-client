@@ -12,7 +12,7 @@ function LobbyComponent(props) {
   };
 
   return (
-    <div className="container w-100 h-100 d-flex justify-content-center align-items-center flex-column">
+    <div className="container w-100 min-vh-100 d-flex justify-content-center align-items-center flex-column">
       <p className="display-1">ScrabbleIO</p>
       {(() => {
         switch (props.mode) {
@@ -126,10 +126,10 @@ function LobbyComponent(props) {
                     placeholder="Code partie"
                     aria-label="Code partie"
                     aria-describedby="button-addon2"
-                    style={{ fontSize: "2.5rem" }}
+                    style={{ fontSize: "2rem" }}
                   />
                   <button
-                    className="btn btn-outline-secondary p-2 d-flex align-items-center justify-content-center"
+                    className="btn btn-outline-success p-2 d-flex align-items-center justify-content-center"
                     type="button"
                     id="button-addon2"
                     style={{ width: "5rem", height: "6rem" }}

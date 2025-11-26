@@ -104,7 +104,7 @@ function RoomComponent({ socket }) {
   };
 
   return (
-    <div className="container w-100 h-100 d-flex justify-content-center align-items-center flex-column">
+    <div className="container w-100 min-vh-100 d-flex justify-content-center align-items-center flex-column">
       <Modal
         visible={isModalVisible}
         text="Code partie copié dans le presse-papier."
@@ -150,7 +150,7 @@ function RoomComponent({ socket }) {
             </li>
           ))}
         </ul>
-        {players.length === 4 && (
+        {players.length >= 2 && (
           <p
             className="display-5 text-center hovering cursorPointer"
             onClick={handleLauchingGame}

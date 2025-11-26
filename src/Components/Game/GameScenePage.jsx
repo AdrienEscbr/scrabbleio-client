@@ -62,6 +62,32 @@ function GameScenePage({ socket }) {
   const [exchangeMode, setExchangeMode] = useState(false);
   const [exchangeSet, setExchangeSet] = useState(new Set());
   const [rackOrder, setRackOrder] = useState([]);
+  const boardRef = useRef(null);
+  const [boardHeight, setBoardHeight] = useState(0);
+
+  // Keep history list height synced with board height
+  useEffect(() => {
+    if (!boardRef.current) return;
+    const el = boardRef.current;
+    const measure = () => {
+      try {
+        const rect = el.getBoundingClientRect();
+        setBoardHeight(rect.height);
+      } catch {}
+    };
+    measure();
+    let ro;
+    if (typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(() => measure());
+      ro.observe(el);
+    }
+    const onResize = () => measure();
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+      if (ro) try { ro.disconnect(); } catch {}
+    };
+  }, []);
 
   const rackTiles = useMemo(() => {
     const used = new Set(placements.map((p) => p.tileId));
@@ -119,7 +145,26 @@ function GameScenePage({ socket }) {
   return (
     <div className="container py-3 h-100">
       <div className="d-flex flex-row justify-content-center align-items-start gap-4">
-        <div className="d-flex flex-column justify-content-center align-items-center">
+      <div style={{ minWidth: 280 }}>
+          {/* <h6>Tour</h6> */}
+          <div className={`${isMyTurn ? 'text-success' : 'infos'} mt-3 mb-5 display-6`}>
+            {isMyTurn ? 'A vous de jouer' : `Tour de : ${(gameState.players||[]).find(p=>p.id===gameState.activePlayerId)?.nickname || gameState.activePlayerId}`}
+          </div>
+          <Timer turnEndsAt={gameState.turnEndsAt} />
+          <div className="mt-3 mb-5 display-6 infos">Lettres restantes: <strong>{gameState.bagCount ?? '-'}</strong></div>
+          <div className="mt-3">
+            <h6>Scores</h6>
+            <ul className="list-group">
+              {Object.entries(gameState.scoresByPlayer).sort((a,b)=>b[1]-a[1]).map(([pid, score]) => (
+                <li key={pid} className="list-group-item d-flex justify-content-between">
+                  <span>{pid === mySocketId ? 'Vous' : ((gameState.players||[]).find(p=>p.id===pid)?.nickname || pid.slice(0,6))}</span>
+                  <strong>{score}</strong>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <div className="d-flex flex-column justify-content-center align-items-center" ref={boardRef}>
           <Board
             board={gameState.board}
             placements={placements}
@@ -135,26 +180,9 @@ function GameScenePage({ socket }) {
           />
         </div>
         <div style={{ minWidth: 280 }}>
-          {/* <h6>Tour</h6> */}
-          <div className={isMyTurn ? 'text-success' : 'infos'} style={{ fontSize: 30 }}>
-            {isMyTurn ? 'A vous de jouer' : `Tour de : ${(gameState.players||[]).find(p=>p.id===gameState.activePlayerId)?.nickname || gameState.activePlayerId}`}
-          </div>
-          <Timer turnEndsAt={gameState.turnEndsAt} />
-          <div className="small mt-2 infos">Lettres restantes: <strong>{gameState.bagCount ?? '-'}</strong></div>
-          <div className="mt-3">
-            <h6>Scores</h6>
-            <ul className="list-group">
-              {Object.entries(gameState.scoresByPlayer).sort((a,b)=>b[1]-a[1]).map(([pid, score]) => (
-                <li key={pid} className="list-group-item d-flex justify-content-between">
-                  <span>{pid === mySocketId ? 'Vous' : ((gameState.players||[]).find(p=>p.id===pid)?.nickname || pid.slice(0,6))}</span>
-                  <strong>{score}</strong>
-                </li>
-              ))}
-            </ul>
-          </div>
           <div className="mt-3 ">
             <h6>Historique</h6>
-            <ul className="small ps-3 log-panel mb-0">
+            <ul className="small ps-3 log-panel mb-0 list-group" style={{ maxHeight: boardHeight || undefined, overflowY: 'auto' }}>
               {[...(gameState.log||[])].slice().reverse().map((l, i) => (
                 <li key={`${i}-${l.playerId}-${l.summary}`}>{l.summary}</li>
               ))}
