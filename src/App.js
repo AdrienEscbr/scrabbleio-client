@@ -1,6 +1,6 @@
 
-import React, { useState, useEffect } from "react";
-import { HashRouter, Routes, Route } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { HashRouter, Routes, Route, useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
 import "./Styles/App.css";
 
@@ -23,6 +23,39 @@ const socket = io(process.env.REACT_APP_ENDPOINT || ENDPOINT, {
 
 
 function App() {
+  const location = useLocation();
+  // Keep-alive ping for Render (every 10 minutes when tab is visible, production only)
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'production') return;
+    const base = (process.env.REACT_APP_KEEP_ALIVE_URL || process.env.REACT_APP_ENDPOINT || ENDPOINT).replace(/\/$/, '');
+    const url = `${base}/health`;
+    const intervalMs = 10 * 60 * 1000; // 10 minutes
+    let timerId = null;
+
+    const ping = () => {
+      fetch(url, { method: 'GET', cache: 'no-store' }).catch(() => {});
+    };
+    const start = () => {
+      if (timerId) return;
+      ping();
+      timerId = setInterval(ping, intervalMs);
+    };
+    const stop = () => {
+      if (!timerId) return;
+      clearInterval(timerId);
+      timerId = null;
+    };
+    const onVis = () => (document.hidden ? stop() : maybeStart());
+    const isOnGamePage = () => location.pathname.startsWith('/game/');
+    const maybeStart = () => { if (isOnGamePage()) start(); else stop(); };
+
+    document.addEventListener('visibilitychange', onVis);
+    if (!document.hidden) maybeStart();
+    return () => {
+      document.removeEventListener('visibilitychange', onVis);
+      stop();
+    };
+  }, [location.pathname]);
 
   return(
     // <BrowserRouter>
