@@ -22,9 +22,8 @@ const socket = io(process.env.REACT_APP_ENDPOINT || ENDPOINT, {
 });
 
 
-function App() {
+function KeepAlivePinger() {
   const location = useLocation();
-  // Keep-alive ping for Render (every 10 minutes when tab is visible, production only)
   useEffect(() => {
     if (process.env.NODE_ENV !== 'production') return;
     const base = (process.env.REACT_APP_KEEP_ALIVE_URL || process.env.REACT_APP_ENDPOINT || ENDPOINT).replace(/\/$/, '');
@@ -45,21 +44,26 @@ function App() {
       clearInterval(timerId);
       timerId = null;
     };
-    const onVis = () => (document.hidden ? stop() : maybeStart());
     const isOnGamePage = () => location.pathname.startsWith('/game/');
-    const maybeStart = () => { if (isOnGamePage()) start(); else stop(); };
+    const maybeStart = () => { if (!document.hidden && isOnGamePage()) start(); else stop(); };
+    const onVis = () => maybeStart();
 
     document.addEventListener('visibilitychange', onVis);
-    if (!document.hidden) maybeStart();
+    maybeStart();
     return () => {
       document.removeEventListener('visibilitychange', onVis);
       stop();
     };
   }, [location.pathname]);
+  return null;
+}
+
+function App() {
 
   return(
     // <BrowserRouter>
     <HashRouter>
+      <KeepAlivePinger />
       <Routes>
           <Route index element={<HomeComponent socket={socket} />}/>
           <Route path="mode" element={<GameModeComponent />}/>
