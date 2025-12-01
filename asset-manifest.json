@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/scrabbleio-client/static/css/main.a5343ff8.css",
-    "main.js": "/scrabbleio-client/static/js/main.76163a73.js",
+    "main.css": "/scrabbleio-client/static/css/main.630220f9.css",
+    "main.js": "/scrabbleio-client/static/js/main.eeb5dc5c.js",
     "static/js/453.419a5d54.chunk.js": "/scrabbleio-client/static/js/453.419a5d54.chunk.js",
     "static/media/copy.svg": "/scrabbleio-client/static/media/copy.68bce7e196ba9027dabd9c3b59a17962.svg",
     "static/media/group.svg": "/scrabbleio-client/static/media/group.0eef40d1fa12d34d6b59bfb2ec896ffe.svg",
     "static/media/arrow_right.svg": "/scrabbleio-client/static/media/arrow_right.9616493befba050423af52c13f516cb6.svg",
     "index.html": "/scrabbleio-client/index.html",
     "static/media/edit.svg": "/scrabbleio-client/static/media/edit.7e076eda382a5d1a4fa85cecaa98e748.svg",
-    "main.a5343ff8.css.map": "/scrabbleio-client/static/css/main.a5343ff8.css.map",
-    "main.76163a73.js.map": "/scrabbleio-client/static/js/main.76163a73.js.map",
+    "main.630220f9.css.map": "/scrabbleio-client/static/css/main.630220f9.css.map",
+    "main.eeb5dc5c.js.map": "/scrabbleio-client/static/js/main.eeb5dc5c.js.map",
     "453.419a5d54.chunk.js.map": "/scrabbleio-client/static/js/453.419a5d54.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.a5343ff8.css",
-    "static/js/main.76163a73.js"
+    "static/css/main.630220f9.css",
+    "static/js/main.eeb5dc5c.js"
   ]
 }
