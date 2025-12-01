@@ -32,7 +32,11 @@ function KeepAlivePinger() {
     let timerId = null;
 
     const ping = () => {
-      fetch(url, { method: 'GET', cache: 'no-store' }).catch(() => {});
+      try {
+        const img = new Image();
+        img.referrerPolicy = 'no-referrer';
+        img.src = `${url}?t=${Date.now()}`;
+      } catch {}
     };
     const start = () => {
       if (timerId) return;
