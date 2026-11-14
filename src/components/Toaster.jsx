@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { useMediaQuery } from '../lib/useMediaQuery.js';
 import Icon from './Icon.jsx';
 import './toaster.css';
 
@@ -27,6 +28,9 @@ export default function Toaster() {
   const toasts = useToasts((s) => s.toasts);
   const remove = useToasts((s) => s.remove);
   const reduce = useReducedMotion();
+  // Enter and leave through the nearest screen edge: top on phones, bottom on desktop.
+  const fromBottom = useMediaQuery('(min-width: 1024px)');
+  const off = fromBottom ? 24 : -24;
   return (
     <div className="toaster" aria-live="polite" role="status">
       <AnimatePresence initial={false}>
@@ -35,14 +39,18 @@ export default function Toaster() {
             key={t.id}
             layout={!reduce}
             className={`toast toast--${t.tone} material`}
-            initial={reduce ? { opacity: 0 } : { opacity: 0, y: -24, scale: 0.96 }}
+            initial={reduce ? { opacity: 0 } : { opacity: 0, y: off, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={reduce ? { opacity: 0 } : { opacity: 0, y: -24, scale: 0.96, transition: { duration: 0.18 } }}
+            exit={reduce ? { opacity: 0 } : { opacity: 0, y: off, scale: 0.96, transition: { duration: 0.18 } }}
             transition={{ type: 'spring', bounce: 0.2, duration: 0.45 }}
             drag={reduce ? false : 'y'}
             dragConstraints={{ top: 0, bottom: 0 }}
-            dragElastic={{ top: 0.8, bottom: 0.1 }}
-            onDragEnd={(_, info) => { if (info.offset.y < -24 || info.velocity.y < -300) remove(t.id); }}
+            dragElastic={fromBottom ? { top: 0.1, bottom: 0.8 } : { top: 0.8, bottom: 0.1 }}
+            onDragEnd={(_, info) => {
+              const dy = fromBottom ? info.offset.y : -info.offset.y;
+              const vy = fromBottom ? info.velocity.y : -info.velocity.y;
+              if (dy > 24 || vy > 300) remove(t.id);
+            }}
             onClick={() => remove(t.id)}
           >
             {(t.icon || TONE_ICONS[t.tone]) && (

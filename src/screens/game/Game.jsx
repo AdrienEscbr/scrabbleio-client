@@ -48,8 +48,10 @@ export default function Game({ room, readOnly = false, onExitBoard }) {
   const [dropTurn, setDropTurn] = useState(null);
   const [celebration, setCelebration] = useState(null);
   const [rackHint, setRackHint] = useState(false);
-  const [drag, setDrag] = useState(null); // { tileId, from: 'rack' | 'board', target } while dragging
+  const [drag, setDrag] = useState(null);
+  const [announce, setAnnounce] = useState(0); // key of the "your turn" announcement, 0 = hidden // { tileId, from: 'rack' | 'board', target } while dragging
 
+  const nicknameOf = (id) => room.players.find((p) => p.id === id)?.nickname;
   const nameOf = useCallback((id) => (id === me ? 'Vous' : room.players.find((p) => p.id === id)?.nickname ?? '—'), [room.players, me]);
 
   // ---- draft <-> server ----------------------------------------------------
@@ -140,9 +142,20 @@ export default function Game({ room, readOnly = false, onExitBoard }) {
     if (game.currentPlayerId === me && prevCurrent.current !== me && !readOnly) {
       sound('turn');
       haptic('turn');
+      setAnnounce(game.turnNumber);
     }
     prevCurrent.current = game.currentPlayerId;
   }, [game.lastMove, game.currentPlayerId, me, nameOf, readOnly]);
+
+  // The game opens on my turn: announce it too.
+  useEffect(() => {
+    if (!readOnly && game.status === 'playing' && game.currentPlayerId === me && game.turnNumber === 1) setAnnounce(1);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!announce) return undefined;
+    const t = setTimeout(() => setAnnounce(0), 1400);
+    return () => clearTimeout(t);
+  }, [announce]);
 
   useEffect(() => {
     if (!celebration) return undefined;
@@ -369,7 +382,7 @@ export default function Game({ room, readOnly = false, onExitBoard }) {
       {wide ? (
         <aside className="game__side game__side--left">
           <div className="side-head">
-            <IconButton icon="more" label="Menu" onClick={() => setSheet('menu')} />
+            <IconButton icon="settings" label="Réglages" onClick={() => setSheet('menu')} />
             <span className="side-head__title">Salon <strong>{room.id}</strong></span>
           </div>
           <Players room={room} me={me} />
@@ -384,11 +397,12 @@ export default function Game({ room, readOnly = false, onExitBoard }) {
       ) : (
         <header className="game__top">
           <Players room={room} me={me} compact />
-          <IconButton icon="more" label="Menu" onClick={() => setSheet('menu')} />
+          <IconButton icon="settings" label="Réglages" onClick={() => setSheet('menu')} />
         </header>
       )}
 
       <main className="game__center">
+        {wide && !readOnly && <TurnStrip wide game={game} myTurn={myTurn} nameOf={nameOf} avatarName={nicknameOf(game.currentPlayerId)} />}
         <div className="board-area">
           <div className="board-stage">
           <Board
@@ -407,7 +421,7 @@ export default function Game({ room, readOnly = false, onExitBoard }) {
             onPendingDown={onPendingDown}
           />
           {!wide && (
-            <TurnStrip game={game} myTurn={myTurn} nameOf={nameOf} zoom={zoom} onZoom={toggleZoom} />
+            <TurnStrip game={game} myTurn={myTurn} nameOf={nameOf} avatarName={nicknameOf(game.currentPlayerId)} zoom={zoom} onZoom={toggleZoom} />
           )}
           </div>
           {!wide && (
@@ -470,6 +484,22 @@ export default function Game({ room, readOnly = false, onExitBoard }) {
           <div className="side-scroll"><History room={room} me={me} /></div>
         </aside>
       )}
+
+      <AnimatePresence>
+        {announce > 0 && (
+          <motion.div
+            key={`turn-${announce}`}
+            className="turn-announce"
+            initial={{ opacity: 0, scale: 0.85, y: 12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: -8, transition: { duration: 0.2 } }}
+            transition={{ type: 'spring', bounce: 0.4, duration: 0.5 }}
+            role="status"
+          >
+            À vous de jouer !
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {celebration && (

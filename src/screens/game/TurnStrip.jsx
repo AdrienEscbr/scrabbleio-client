@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react';
-import { IconButton } from '../../components/ui.jsx';
+import { Avatar, IconButton } from '../../components/ui.jsx';
 import { formatClock, useRemaining } from './Players.jsx';
 
 function lastMoveText(m, nameOf) {
@@ -11,13 +11,32 @@ function lastMoveText(m, nameOf) {
   return `${who} · passe`;
 }
 
-/** Phone-only band between the board and the rack: whose turn, clock, last move, zoom. */
-export default function TurnStrip({ game, myTurn, nameOf, zoom, onZoom }) {
+/**
+ * Whose turn it is, the clock and the last move.
+ * Phone: band between board and rack (with zoom). Desktop (`wide`): banner above the board.
+ */
+export default function TurnStrip({ game, myTurn, nameOf, avatarName, zoom, onZoom, wide = false }) {
   const remaining = useRemaining(game.turnEndsAt);
   const urgent = remaining != null && remaining <= 10_000;
-  const title = game.status !== 'playing' ? 'Partie terminée' : myTurn ? 'À vous de jouer' : `Tour de ${nameOf(game.currentPlayerId)}`;
+  const playing = game.status === 'playing';
+  const title = !playing ? 'Partie terminée' : myTurn ? 'À vous de jouer !' : `Au tour de ${nameOf(game.currentPlayerId)}`;
+  const index = game.players.findIndex((p) => p.id === game.currentPlayerId);
   return (
-    <div className={`turn-strip material ${myTurn ? 'is-mine' : ''}`}>
+    <div className={`turn-strip material ${myTurn ? 'is-mine' : ''} ${wide ? 'turn-strip--wide' : ''}`}>
+      {playing && (
+        <AnimatePresence mode="popLayout" initial={false}>
+          <motion.span
+            key={game.currentPlayerId}
+            className="turn-strip__avatar"
+            initial={{ opacity: 0, scale: 0.6 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.6 }}
+            transition={{ type: 'spring', bounce: 0.35, duration: 0.45 }}
+          >
+            <Avatar name={avatarName} index={index} size={wide ? 40 : 36} />
+          </motion.span>
+        </AnimatePresence>
+      )}
       <div className="turn-strip__main">
         <AnimatePresence mode="popLayout" initial={false}>
           <motion.span
@@ -38,7 +57,7 @@ export default function TurnStrip({ game, myTurn, nameOf, zoom, onZoom }) {
           {game.paused ? '⏸' : formatClock(remaining)}
         </span>
       )}
-      <IconButton icon={zoom > 1 ? 'zoomOut' : 'zoomIn'} label={zoom > 1 ? 'Dézoomer' : 'Zoomer'} onClick={onZoom} />
+      {!wide && <IconButton icon={zoom > 1 ? 'zoomOut' : 'zoomIn'} label={zoom > 1 ? 'Dézoomer' : 'Zoomer'} onClick={onZoom} />}
     </div>
   );
 }

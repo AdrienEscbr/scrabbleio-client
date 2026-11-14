@@ -10,8 +10,9 @@
   gap: var(--space-2);
   pointer-events: none;
 }
+/* Desktop: bottom-left, in the free space under the players — never over the board or the history. */
 @media (min-width: 1024px) {
-  .toaster { left: auto; right: var(--space-6); transform: none; top: var(--space-6); width: 340px; }
+  .toaster { top: auto; bottom: var(--space-6); left: var(--space-6); transform: none; width: 300px; }
 }
 .toast {
   pointer-events: auto;

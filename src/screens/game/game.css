@@ -83,9 +83,13 @@
   box-shadow: 0 0 0 1px var(--border), var(--shadow-sm);
   transition: box-shadow 300ms var(--ease-out), background-color 300ms ease, transform 300ms var(--ease-out);
 }
+/* The player to play is the figure; the others step back. */
+.game .player:not(.is-active) { opacity: 0.6; }
 .player.is-active {
-  box-shadow: 0 0 0 2px var(--accent), 0 10px 30px -12px color-mix(in oklab, var(--accent) 60%, transparent);
+  background: linear-gradient(135deg, color-mix(in oklab, var(--accent) 22%, var(--surface)), var(--surface) 70%);
+  box-shadow: 0 0 0 2px var(--accent), 0 12px 32px -12px color-mix(in oklab, var(--accent) 70%, transparent);
 }
+.players:not(.players--compact) .player.is-active { transform: scale(1.03); }
 .player__avatar { position: relative; display: grid; place-items: center; flex: none; }
 .player__info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .player__name { font-weight: 650; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -150,6 +154,7 @@
 .players--compact .player__score { font-size: var(--text-lg); }
 .players--compact .turn-ring { inset: -4px; width: calc(100% + 8px); height: calc(100% + 8px); }
 .players--compact .player__gain { top: -14px; }
+.players--compact .player.is-active { background: color-mix(in oklab, var(--accent) 22%, var(--surface)); }
 
 /* =========================================================
    Board
@@ -319,6 +324,19 @@
 /* Phone: when the area is clearly taller than wide, pin the board to the top
    and use the leftover height for the turn strip (keeps the rack in the thumb zone). */
 .turn-strip { display: none; }
+.turn-strip__avatar { display: grid; place-items: center; flex: none; }
+/* Desktop banner above the board. */
+.turn-strip--wide {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: min(100%, 680px);
+  margin: 0 auto var(--space-3);
+  padding: var(--space-2) var(--space-5) var(--space-2) var(--space-3);
+  border-radius: var(--radius-full);
+}
+.turn-strip--wide .turn-strip__main { flex-direction: row; align-items: baseline; gap: var(--space-3); }
+.turn-strip--wide .turn-strip__title { font-size: var(--text-xl); }
 @container (max-aspect-ratio: 5 / 6) {
   .board-stage { justify-content: flex-start; }
   .turn-strip {
@@ -333,7 +351,16 @@
   }
   .zoom-btn { display: none; }
 }
-.turn-strip.is-mine { box-shadow: 0 0 0 2px color-mix(in oklab, var(--accent) 70%, transparent), var(--shadow-md); }
+.turn-strip.is-mine {
+  background: linear-gradient(135deg, color-mix(in oklab, var(--accent) 24%, var(--material)), var(--material) 70%);
+  box-shadow: 0 0 0 2px var(--accent), var(--shadow-md);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .turn-strip.is-mine { animation: mine-glow 2.4s ease-in-out infinite; }
+}
+@keyframes mine-glow {
+  50% { box-shadow: 0 0 0 2px var(--accent), 0 0 28px -4px color-mix(in oklab, var(--accent) 60%, transparent); }
+}
 .turn-strip__main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .turn-strip__title { font-weight: 700; font-family: var(--font-display); font-size: var(--text-lg); letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .turn-strip.is-mine .turn-strip__title { color: color-mix(in oklab, var(--accent) 60%, var(--text)); }
@@ -486,6 +513,26 @@ html.is-dragging, html.is-dragging * { cursor: grabbing !important; }
 /* =========================================================
    Bingo celebration
    ========================================================= */
+/* "Your turn" announcement over the board */
+.turn-announce {
+  position: fixed;
+  top: 42%;
+  left: 50%;
+  translate: -50% -50%;
+  z-index: 130;
+  pointer-events: none;
+  padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  box-shadow: 0 20px 50px -12px color-mix(in oklab, var(--accent) 80%, transparent), 0 0 0 4px color-mix(in oklab, var(--accent) 30%, transparent);
+}
+
 .celebration { position: fixed; inset: 0; z-index: 140; display: grid; place-items: center; pointer-events: none; }
 .celebration__card {
   display: flex;
