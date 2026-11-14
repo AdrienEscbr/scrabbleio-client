@@ -1,0 +1,153 @@
+/* ============================================================
+   Design tokens. Light is the default; dark follows the OS unless
+   the player forces a theme (data-theme on <html>).
+   ============================================================ */
+
+:root {
+  /* Typography */
+  --font-ui: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --font-display: 'Bricolage Grotesque', var(--font-ui);
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: clamp(2.25rem, 6vw, 3.5rem);
+  --text-hero: clamp(3rem, 11vw, 6.5rem);
+
+  /* Spacing (4pt grid) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 26px;
+  --radius-full: 999px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-press: 120ms;
+  --dur-fast: 180ms;
+  --dur-base: 240ms;
+
+  /* Safe areas */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+
+  /* Brand */
+  --accent: #f0a21a;
+  --accent-strong: #e08a00;
+  --accent-ink: #2a1a00;
+  --accent-soft: color-mix(in oklab, var(--accent) 18%, transparent);
+  --danger: #e5484d;
+  --success: #30a46c;
+
+  /* Players */
+  --p0: #f0a21a;
+  --p1: #12a594;
+  --p2: #8e4ec6;
+  --p3: #e5484d;
+
+  /* Board — a physical object: same in both themes */
+  --board-frame: #141b2d;
+  --board-cell: #1f2840;
+  --board-cell-line: #141b2d;
+  --board-ink: rgba(255, 255, 255, 0.55);
+  --prem-tw: #e5484d;
+  --prem-dw: #e0789a;
+  --prem-tl: #3e63dd;
+  --prem-dl: #5fb3e6;
+
+  /* Tiles */
+  --tile-face: #f7efdd;
+  --tile-face-2: #efe3c8;
+  --tile-edge: #c6ad7f;
+  --tile-ink: #2b2219;
+  --tile-joker-ink: #5b49d6;
+  --tile-pending-ring: var(--accent);
+
+  /* Surfaces — light */
+  --bg: #f4f1ea;
+  --bg-glow-1: rgba(240, 162, 26, 0.16);
+  --bg-glow-2: rgba(62, 99, 221, 0.12);
+  --surface: #ffffff;
+  --surface-2: #f8f6f1;
+  --surface-sunken: #ebe7dd;
+  --material: rgba(255, 255, 255, 0.72);
+  --border: rgba(30, 25, 15, 0.1);
+  --border-strong: rgba(30, 25, 15, 0.18);
+  --text: #1d1a15;
+  --text-2: #5e574b;
+  --text-3: #8f877a;
+  --shadow-sm: 0 1px 2px rgba(30, 25, 15, 0.06), 0 1px 1px rgba(30, 25, 15, 0.04);
+  --shadow-md: 0 6px 20px -6px rgba(30, 25, 15, 0.18), 0 2px 6px rgba(30, 25, 15, 0.06);
+  --shadow-lg: 0 24px 60px -18px rgba(30, 25, 15, 0.35), 0 6px 18px rgba(30, 25, 15, 0.08);
+  --scrim: rgba(20, 16, 10, 0.4);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0c0f17;
+    --bg-glow-1: rgba(240, 162, 26, 0.1);
+    --bg-glow-2: rgba(62, 99, 221, 0.16);
+    --surface: #161b27;
+    --surface-2: #1b2130;
+    --surface-sunken: #0f131d;
+    --material: rgba(22, 27, 39, 0.72);
+    --border: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.16);
+    --text: #f1eee8;
+    --text-2: #aaa6a0;
+    --text-3: #77736d;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 8px 24px -8px rgba(0, 0, 0, 0.6), 0 2px 6px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 30px 70px -20px rgba(0, 0, 0, 0.8), 0 8px 20px rgba(0, 0, 0, 0.4);
+    --scrim: rgba(0, 0, 0, 0.55);
+    --board-frame: #0a0e18;
+    --board-cell: #1a2236;
+    --board-cell-line: #0a0e18;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #0c0f17;
+  --bg-glow-1: rgba(240, 162, 26, 0.1);
+  --bg-glow-2: rgba(62, 99, 221, 0.16);
+  --surface: #161b27;
+  --surface-2: #1b2130;
+  --surface-sunken: #0f131d;
+  --material: rgba(22, 27, 39, 0.72);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --text: #f1eee8;
+  --text-2: #aaa6a0;
+  --text-3: #77736d;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px -8px rgba(0, 0, 0, 0.6), 0 2px 6px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 30px 70px -20px rgba(0, 0, 0, 0.8), 0 8px 20px rgba(0, 0, 0, 0.4);
+  --scrim: rgba(0, 0, 0, 0.55);
+  --board-frame: #0a0e18;
+  --board-cell: #1a2236;
+  --board-cell-line: #0a0e18;
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root { --material: var(--surface); }
+}

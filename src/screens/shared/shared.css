@@ -1,0 +1,41 @@
+.settings { display: flex; flex-direction: column; gap: var(--space-6); }
+.settings__group { display: flex; flex-direction: column; gap: var(--space-2); }
+.settings__group + .settings__group { padding-top: var(--space-2); border-top: 1px solid var(--border); }
+
+.rules { display: flex; flex-direction: column; gap: var(--space-5); color: var(--text-2); }
+.rules h3 { font-size: var(--text-lg); color: var(--text); margin-bottom: var(--space-1); }
+.rules ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: var(--space-1); }
+.rules strong { color: var(--text); }
+.rules kbd {
+  font: 600 0.8em var(--font-ui);
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: var(--surface-sunken);
+  box-shadow: 0 1px 0 var(--border-strong);
+}
+.rules__legend { list-style: none; padding: 0 !important; display: grid !important; grid-template-columns: 1fr 1fr; gap: var(--space-2) !important; margin-bottom: var(--space-2) !important; }
+.rules__legend li { display: flex; align-items: center; gap: var(--space-2); color: var(--text); font-size: var(--text-sm); }
+.legend-swatch { width: 20px; height: 20px; border-radius: 6px; flex: none; }
+.legend-swatch.prem-TW { background: var(--prem-tw); }
+.legend-swatch.prem-DW { background: var(--prem-dw); }
+.legend-swatch.prem-TL { background: var(--prem-tl); }
+.legend-swatch.prem-DL { background: var(--prem-dl); }
+
+.nickname { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); padding-top: var(--space-2); }
+.field {
+  width: 100%;
+  height: 52px;
+  padding: 0 var(--space-4);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+  box-shadow: 0 0 0 1px var(--border) inset;
+  font-size: var(--text-lg);
+  font-weight: 600;
+  text-align: center;
+  transition: box-shadow var(--dur-fast) ease;
+}
+.field:focus { outline: none; box-shadow: 0 0 0 2px var(--accent) inset; }
+.field.is-invalid { box-shadow: 0 0 0 2px var(--danger) inset; }
+.field-hint { font-size: var(--text-sm); color: var(--text-3); text-align: center; }
+.field-hint.is-error { color: var(--danger); }

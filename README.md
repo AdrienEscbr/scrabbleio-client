@@ -1,70 +1,38 @@
-# Getting Started with Create React App
+# ScrabbleIO — client
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Interface web du jeu (React 19 + Vite), pensée d'abord pour le mobile, et jouable aussi sur ordinateur à la souris et au clavier.
 
-## Available Scripts
+```bash
+npm install
+npm run dev        # http://localhost:5173 (et sur le réseau local, pour tester sur téléphone)
+npm run build      # build de production dans dist/
+npm run deploy     # build + publication sur GitHub Pages (branche gh-pages)
+```
 
-In the project directory, you can run:
+Le serveur doit tourner à côté (`scrabbleio-server`, port 3001). En développement, le client se connecte à `http://<hôte>:3001` ; en production à Render. Pour changer l'adresse : `VITE_SERVER_URL` (voir `.env.example`).
 
-### `npm start`
+## Moteur partagé
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+`src/engine/` est une **copie générée** du moteur du serveur (`scrabbleio-server/src/engine`). Le client s'en sert pour afficher en direct le score d'un coup avant validation, avec exactement les règles du serveur. Après toute modification du moteur côté serveur :
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```bash
+npm run sync-engine
+```
 
-### `npm test`
+## Organisation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+| Dossier | Contenu |
+|---|---|
+| `src/styles/` | Variables de design (couleurs, typographie, espacements, animations, thèmes clair et sombre) et styles de base. |
+| `src/components/` | Composants de base : tuile 3D (CSS), boutons, panneaux, notifications, confettis. |
+| `src/lib/` | Connexion Socket.IO et session, état global (zustand), préférences, sons (synthétisés en Web Audio) et vibrations, textes. |
+| `src/screens/home/` | Accueil et scène 3D (three.js, chargée à la demande). |
+| `src/screens/room/` | Salon, résultats, et l'écran qui choisit la vue selon l'état du salon. |
+| `src/screens/game/` | Plateau, chevalet, glisser-déposer, scores, historique, brouillon du coup en cours. |
 
-### `npm run build`
+## Interactions
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- **Glisser-déposer** au doigt, au stylet ou à la souris (pointer events) : du chevalet vers le plateau, d'une case à l'autre, retour au chevalet, réordonnancement.
+- **Toucher-toucher** : toucher une lettre puis une case. Toucher une lettre posée la reprend.
+- **Clavier** (ordinateur) : cliquer une case, taper les lettres, `Espace` change le sens, `Retour arrière` annule la dernière lettre, `Entrée` joue, `Échap` reprend tout.
+- Le **brouillon** du coup survit à un rechargement de la page (stocké pour l'onglet en cours), et on peut préparer son coup pendant le tour des autres.

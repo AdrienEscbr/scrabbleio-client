@@ -1,57 +1,31 @@
 {
-  "name": "client",
-  "version": "0.1.0",
+  "name": "scrabbleio-client",
+  "version": "2.0.0",
   "private": true,
-  "dependencies": {
-    "@babylonjs/core": "^8.4.0",
-    "@babylonjs/havok": "^1.3.10",
-    "@babylonjs/inspector": "^8.4.0",
-    "@babylonjs/loaders": "^8.4.0",
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.2.0",
-    "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.8.1",
-    "babylonjs-hook": "^0.1.1",
-    "bootstrap": "^5.3.3",
-    "cors": "^2.8.5",
-    "react": "^19.0.0",
-    "react-bootstrap": "^2.10.9",
-    "react-dom": "^19.0.0",
-    "react-router-dom": "^7.9.6",
-    "react-scripts": "5.0.1",
-    "socket.io-client": "^4.8.1",
-    "web-vitals": "^2.1.4"
-  },
+  "type": "module",
   "homepage": "https://adrienescbr.github.io/scrabbleio-client",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "sync-engine": "node scripts/sync-engine.mjs",
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview --host",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist"
   },
-  "proxy": "https://scrabbleio-server.onrender.com",
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "dependencies": {
+    "@react-three/drei": "^10.7.9",
+    "@react-three/fiber": "^9.8.2",
+    "motion": "^14.14.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-router-dom": "^7.18.5",
+    "socket.io-client": "^4.8.4",
+    "three": "^0.187.0",
+    "zustand": "^5.1.0"
   },
   "devDependencies": {
-    "gh-pages": "^6.3.0"
+    "@vitejs/plugin-react": "^6.3.0",
+    "gh-pages": "^6.3.0",
+    "vite": "^8.3.8"
   }
 }
