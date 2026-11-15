@@ -100,11 +100,11 @@ export default function Players({ room, me, compact }) {
         return (
           <li key={gp.id} className={`player ${active ? 'is-active' : ''} ${gp.id === me ? 'is-me' : ''}`} aria-current={active || undefined}>
             <span className="player__avatar">
-              <Avatar name={p?.nickname} index={i} size={compact ? 30 : 40} online={p?.connected !== false} />
+              <Avatar name={p?.nickname ?? gp.nickname} index={i} size={compact ? 30 : 40} online={p?.connected !== false} />
               {active && !game.paused && <TurnRing key={game.turnEndsAt} endsAt={game.turnEndsAt} durationMs={game.turnDurationMs} urgent={urgent} />}
             </span>
             <span className="player__info">
-              <span className="player__name">{gp.id === me ? 'Vous' : p?.nickname}</span>
+              <span className="player__name">{gp.id === me ? 'Vous' : (p?.nickname ?? gp.nickname)}</span>
               {!compact && (
                 <span className="player__sub">
                   {active ? (

@@ -51,8 +51,8 @@ export default function Game({ room, readOnly = false, onExitBoard }) {
   const [drag, setDrag] = useState(null);
   const [announce, setAnnounce] = useState(0); // key of the "your turn" announcement, 0 = hidden // { tileId, from: 'rack' | 'board', target } while dragging
 
-  const nicknameOf = (id) => room.players.find((p) => p.id === id)?.nickname;
-  const nameOf = useCallback((id) => (id === me ? 'Vous' : room.players.find((p) => p.id === id)?.nickname ?? '—'), [room.players, me]);
+  const nicknameOf = (id) => room.players.find((p) => p.id === id)?.nickname ?? game.players.find((p) => p.id === id)?.nickname;
+  const nameOf = useCallback((id) => (id === me ? 'Vous' : room.players.find((p) => p.id === id)?.nickname ?? game.players.find((p) => p.id === id)?.nickname ?? '—'), [room.players, game.players, me]);
 
   // ---- draft <-> server ----------------------------------------------------
   // Restore a draft from this tab (page reload) before reconciling with the server.

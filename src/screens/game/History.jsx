@@ -18,7 +18,7 @@ function describe(m) {
 export default function History({ room, me, onLocate }) {
   const game = room.game;
   const order = game.players.map((p) => p.id);
-  const name = (id) => (id === me ? 'Vous' : room.players.find((p) => p.id === id)?.nickname ?? '—');
+  const name = (id) => (id === me ? 'Vous' : room.players.find((p) => p.id === id)?.nickname ?? game.players.find((p) => p.id === id)?.nickname ?? '—');
   const entries = [...game.log].reverse();
   const { show, clear } = useHighlight.getState();
 

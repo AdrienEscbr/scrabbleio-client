@@ -28,7 +28,8 @@ export default function Results({ room, onViewBoard }) {
   const results = room.game?.results;
   const players = room.players;
   const indexOf = (id) => room.game.players.findIndex((p) => p.id === id);
-  const nameOf = (id) => players.find((p) => p.id === id)?.nickname ?? '—';
+  // Game players keep their nickname even after leaving the room.
+  const nameOf = (id) => players.find((p) => p.id === id)?.nickname ?? room.game.players.find((p) => p.id === id)?.nickname ?? '—';
   const iWon = results?.winnerIds.includes(me);
   const isHost = room.hostId === me;
   const present = players.filter((p) => p.connected).length;
@@ -68,15 +69,17 @@ export default function Results({ room, onViewBoard }) {
       <ol className="ranking">
         {results.ranking.map((r, rank) => {
           const best = r.stats.bestMove;
+          // Competition ranking: tied players share the same position (1, 1, 3…).
+          const position = 1 + results.ranking.filter((o) => o.score > r.score).length;
           return (
             <motion.li
               key={r.playerId}
-              className={`rank card ${rank === 0 ? 'is-first' : ''} ${r.playerId === me ? 'is-me' : ''}`}
+              className={`rank card ${position === 1 ? 'is-first' : ''} ${r.playerId === me ? 'is-me' : ''}`}
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ type: 'spring', bounce: 0, duration: 0.6, delay: 0.15 + rank * 0.08 }}
             >
-              <span className="rank__pos tabular">{rank + 1}</span>
+              <span className="rank__pos tabular" aria-label={`Position ${position}${tie && position === 1 ? ', ex æquo' : ''}`}>{position}</span>
               <Avatar name={nameOf(r.playerId)} index={indexOf(r.playerId)} size={44} />
               <div className="rank__who">
                 <span className="rank__name">{nameOf(r.playerId)}{r.playerId === me && <em> · vous</em>}</span>
@@ -97,16 +100,18 @@ export default function Results({ room, onViewBoard }) {
       </ol>
 
       <footer className="results__cta">
-        {isHost ? (
-          <Button variant="primary" size="lg" icon="play" onClick={rematch} loading={starting} disabled={present < 2}>
-            {present < 2 ? 'Revanche : en attente des joueurs' : 'Revanche'}
-          </Button>
-        ) : (
-          <div className="waiting-host"><span className="dots" aria-hidden><i /><i /><i /></span>L’hôte peut lancer une revanche</div>
-        )}
-        <div className="results__secondary">
-          <Button variant="secondary" onClick={onViewBoard}>Voir le plateau</Button>
-          <Button variant="ghost" onClick={() => navigate('/')}>Accueil</Button>
+        <div className="results__actions">
+          {isHost ? (
+            <Button variant="primary" size="lg" className="btn--block" icon="play" onClick={rematch} loading={starting} disabled={present < 2}>
+              {present < 2 ? 'Revanche : en attente des joueurs' : 'Revanche'}
+            </Button>
+          ) : (
+            <div className="waiting-host"><span className="dots" aria-hidden><i /><i /><i /></span>L’hôte peut lancer une revanche</div>
+          )}
+          <div className="results__secondary">
+            <Button variant="secondary" size="lg" className="btn--block" onClick={onViewBoard}>Voir le plateau</Button>
+            <Button variant="secondary" size="lg" className="btn--block" onClick={() => navigate('/')}>Accueil</Button>
+          </div>
         </div>
       </footer>
     </div>

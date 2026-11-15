@@ -191,6 +191,7 @@
 .rank__adj { font-size: var(--text-xs); font-family: var(--font-ui); font-weight: 700; color: var(--danger); margin-top: 2px; }
 .rank__adj.is-plus { color: var(--success); }
 
-.results__cta { flex-direction: column; align-items: center; gap: var(--space-2); width: 100%; }
-.results__cta > .btn, .results__cta > .waiting-host { width: min(560px, 100%); }
-.results__secondary { display: flex; gap: var(--space-2); }
+.results__cta { width: 100%; }
+/* One block, one width: the main action on top, the two secondary ones splitting the row below. */
+.results__actions { width: min(560px, 100%); display: flex; flex-direction: column; gap: var(--space-2); }
+.results__secondary { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }
